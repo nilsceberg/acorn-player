@@ -8,11 +8,13 @@
 		"start": "electron build/index"
 	},
 	"devDependencies": {
+		"@types/uuid": "^3.4.5",
 		"typescript": "^3.6.4"
 	},
 	"dependencies": {
 		"@types/electron": "^1.6.10",
 		"electron": "^6.0.12",
-		"graphql": "^14.5.8"
+		"graphql": "^14.5.8",
+		"uuid": "^3.3.3"
 	}
 }

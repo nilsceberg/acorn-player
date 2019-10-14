@@ -1,6 +1,7 @@
 import { app, BrowserWindow } from "electron";
+import { Player } from "./Player";
 
-function createWindow() {
+async function createWindow() {
 	const win = new BrowserWindow({
 		width: 800,
 		height: 600,
@@ -10,7 +11,10 @@ function createWindow() {
 		}
 	});
 
-	win.loadFile("../static/index.html");
+	await win.loadFile("../static/index.html");
 }
 
 app.on("ready", createWindow);
+
+const player = new Player();
+player.loadConfig();
