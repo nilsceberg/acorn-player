@@ -1,0 +1,18 @@
+{
+	"name": "acorn-player",
+	"version": "0.1.0",
+	"main": "index.js",
+	"author": "Nils Ceberg",
+	"license": "MIT",
+	"scripts": {
+		"start": "electron build/index"
+	},
+	"devDependencies": {
+		"typescript": "^3.6.4"
+	},
+	"dependencies": {
+		"@types/electron": "^1.6.10",
+		"electron": "^6.0.12",
+		"graphql": "^14.5.8"
+	}
+}
