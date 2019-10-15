@@ -1,20 +1,11 @@
-import { app, BrowserWindow } from "electron";
 import { Player } from "./Player";
 
-async function createWindow() {
-	const win = new BrowserWindow({
-		width: 800,
-		height: 600,
-		autoHideMenuBar: true,
-		webPreferences: {
-			nodeIntegration: true
-		}
-	});
+const player = new Player();
 
-	await win.loadFile("../static/index.html");
+async function start() {
+	await player.loadConfig();
+	document.getElementById("root").innerHTML
+		= `${player.getUuid()} @ ${player.getServerUri}`;
 }
 
-app.on("ready", createWindow);
-
-const player = new Player();
-player.loadConfig();
+start();

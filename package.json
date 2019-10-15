@@ -5,16 +5,18 @@
 	"author": "Nils Ceberg",
 	"license": "MIT",
 	"scripts": {
-		"start": "electron build/index"
+		"start": "electron build/electron"
 	},
 	"devDependencies": {
 		"@types/uuid": "^3.4.5",
+		"@types/ws": "^6.0.3",
+		"@types/electron": "^1.6.10",
 		"typescript": "^3.6.4"
 	},
 	"dependencies": {
-		"@types/electron": "^1.6.10",
 		"electron": "^6.0.12",
 		"graphql": "^14.5.8",
-		"uuid": "^3.3.3"
+		"uuid": "^3.3.3",
+		"ws": "^7.1.2"
 	}
 }

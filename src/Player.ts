@@ -37,4 +37,12 @@ export class Player {
 		console.log(" * UUID: " + this.uuid);
 		console.log(" * Server: " + this.server);
 	}
+
+	public getServerUri(): string {
+		return this.server;
+	}
+
+	public getUuid(): string {
+		return this.uuid;
+	}
 }
