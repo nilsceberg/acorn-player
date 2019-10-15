@@ -1,7 +1,4 @@
 import { app, BrowserWindow } from "electron";
-import { Connection } from "./net/Connection";
-import WebSocket = require("ws");
-import uuid = require("uuid");
 
 async function createWindow() {
 	const win = new BrowserWindow({
@@ -13,10 +10,8 @@ async function createWindow() {
 		}
 	});
 
-	await win.loadFile("../static/index.html");
+	//await win.loadFile("../static/index.html");
+	await win.loadURL("http://localhost:4444/");
 }
 
 app.on("ready", createWindow);
-
-const conn = new Connection("ws://localhost:8080");
-conn.start();

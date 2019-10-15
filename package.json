@@ -8,14 +8,21 @@
 		"start": "electron build/electron"
 	},
 	"devDependencies": {
+		"@types/electron": "^1.6.10",
+		"@types/react": "^16.9.6",
+		"@types/react-dom": "^16.9.2",
 		"@types/uuid": "^3.4.5",
 		"@types/ws": "^6.0.3",
-		"@types/electron": "^1.6.10",
+		"fuse-box": "^3.7.1",
 		"typescript": "^3.6.4"
 	},
 	"dependencies": {
 		"electron": "^6.0.12",
 		"graphql": "^14.5.8",
+		"mobx": "^5.14.0",
+		"mobx-react": "^6.1.4",
+		"react": "^16.10.2",
+		"react-dom": "^16.10.2",
 		"uuid": "^3.3.3",
 		"ws": "^7.1.2"
 	}

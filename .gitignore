@@ -1,4 +1,6 @@
 build/
+dist/
 node_modules/
 yarn-error.log
 local.json
+.fusebox/

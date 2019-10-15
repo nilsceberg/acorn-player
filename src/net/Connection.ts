@@ -1,25 +1,44 @@
+import { Model } from "../model/Model";
+
 import WebSocket from "ws";
-import uuid from "uuid";
+import { sleep } from "../util/async";
 
 type State = (message: any) => Promise<State>;
 
 export class Connection {
 	private ws: WebSocket;
-	private url: string;
 	private state: State;
 
-	constructor(url: string) {
+	private url: string;
+	private uuid: string;
+
+	private model: Model;
+
+	constructor(url: string, uuid: string, model: Model) {
 		this.url = url;
+		this.uuid = uuid;
+		this.model = model;
 	}
 
-	public start() {
-		this.state = this.initState;
-		this.ws = new WebSocket(this.url);
+	public connect() {
 		console.log("connecting...");
+		this.state = null;
+		this.ws = new WebSocket(this.url);
 
-		this.ws.on("close", () => {
-			console.log("connection closed");
-		})
+		this.ws.on("close", async () => {
+			this.model.systemMessage = "Connection lost";
+			if (this.state) {
+				console.log("connection closed; reconnecting...");
+			} else {
+				console.log("connection failed; retrying in 1s...");
+				await sleep(1000);
+			}
+			this.connect();
+		});
+
+		this.ws.on("error", () => {
+			
+		});
 
 		this.ws.on("message", async data => {
 			try {
@@ -33,10 +52,15 @@ export class Connection {
 
 		this.ws.on("open", () => {
 			console.log("connected");
+			// Once we initially connect, send a "hello" message with
+			// our uuid in order to authenticate ourselves and
+			// establish the connection.
+			this.state = this.initState;
 			this.send({
-				uuid: uuid.v4(),
+				uuid: this.uuid,
 			});
 			console.log("sent");
+			
 		});
 	}
 
@@ -56,7 +80,8 @@ export class Connection {
 		}
 
 		const name = message.name;
-		console.log("We are " + name)
+		console.log("We are " + name);
+		this.model.systemMessage = "Connected as " + name;
 		return this.connectedState;
 	}
 

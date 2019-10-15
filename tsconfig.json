@@ -6,6 +6,8 @@
 		"target": "es6",
 		"sourceMap": true,
 		"outDir": "build",
+		"jsx": "react",
+		"experimentalDecorators": true
 	},
 	"include": ["src"]
 }
