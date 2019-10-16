@@ -13,7 +13,8 @@ async function start() {
 	globalState.systemMessage = player.getUuid() + " @ " + player.getServerUri();
 	const conn = new Connection(player.getServerUri(), player.getUuid(), globalState);
 	conn.connect();
+
+	ReactDOM.render(<App model={globalState} disposeConnection={() => conn.dispose()}/>, document.getElementById("root"));
 }
 
-ReactDOM.render(<App model={globalState}/>, document.getElementById("root"));
 start();

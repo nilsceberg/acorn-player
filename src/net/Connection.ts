@@ -8,6 +8,7 @@ type State = (message: any) => Promise<State>;
 export class Connection {
 	private ws: WebSocket;
 	private state: State;
+	private disposed: boolean;
 
 	private url: string;
 	private uuid: string;
@@ -27,6 +28,11 @@ export class Connection {
 
 		this.ws.on("close", async () => {
 			this.model.systemMessage = "Connection lost";
+			if (this.disposed) {
+				console.log("Disposed; not reconnecting.");
+				return;
+			}
+
 			if (this.state) {
 				console.log("connection closed; reconnecting...");
 			} else {
@@ -37,7 +43,6 @@ export class Connection {
 		});
 
 		this.ws.on("error", () => {
-			
 		});
 
 		this.ws.on("message", async data => {
@@ -72,6 +77,11 @@ export class Connection {
 		console.log("Closing connection: " + reason);
 		this.ws.close();
 		return this.disconnectedState;
+	}
+
+	public dispose() {
+		this.disposed = true;
+		this.close("Disposing");
 	}
 
 	private async initState(message: any): Promise<State> {
