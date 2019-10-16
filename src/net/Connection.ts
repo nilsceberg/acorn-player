@@ -94,6 +94,7 @@ export class Connection {
 		//this.model.systemMessage = "Connected as " + name;
 		this.model.systemMessage = "";
 		this.model.name = name;
+		this.model.identify = false;
 		return this.connectedState;
 	}
 
