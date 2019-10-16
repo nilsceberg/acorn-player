@@ -91,10 +91,13 @@ export class Connection {
 
 		const name = message.name;
 		console.log("We are " + name);
-		//this.model.systemMessage = "Connected as " + name;
+
+		// Reset state
 		this.model.systemMessage = "";
 		this.model.name = name;
 		this.model.identify = false;
+		this.model.slide = null;
+
 		return this.connectedState;
 	}
 
@@ -103,6 +106,10 @@ export class Connection {
 
 		if (message.identify !== undefined) {
 			this.model.identify = message.identify;
+		}
+
+		if (message.display !== undefined) {
+			this.model.slide = message.display;
 		}
 
 		return this.connectedState;
