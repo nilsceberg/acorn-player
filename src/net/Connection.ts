@@ -81,12 +81,19 @@ export class Connection {
 
 		const name = message.name;
 		console.log("We are " + name);
-		this.model.systemMessage = "Connected as " + name;
+		//this.model.systemMessage = "Connected as " + name;
+		this.model.systemMessage = "";
+		this.model.name = name;
 		return this.connectedState;
 	}
 
 	private async connectedState(message: any): Promise<State> {
 		console.log("Message: ", message);
+
+		if (message.identify !== undefined) {
+			this.model.identify = message.identify;
+		}
+
 		return this.connectedState;
 	}
 
