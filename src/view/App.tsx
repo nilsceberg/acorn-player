@@ -1,7 +1,7 @@
 import * as React from "react";
 import { observer } from "mobx-react";
 import { Model } from "../model/Model";
-import { Identify } from "./Identify";
+import { SystemMessage } from "./SystemMessage";
 import { Connection } from "../net/Connection";
 import { Website } from "./Website";
 
@@ -11,7 +11,7 @@ interface AppProps {
 }
 
 const ItemTypeMap: { [type: string]: (props: { data: any }) => JSX.Element } = {
-	"website": Website,
+	"WEBSITE": Website,
 }
 
 @observer
@@ -31,15 +31,20 @@ export class App extends React.Component<AppProps> {
 			slide = <Item data={model.slide.data}/>
 		}
 
+		let message = null;
+		if (model.systemMessage) {
+			message = model.systemMessage;
+		}
+		else if (model.identify) {
+			message = model.name;
+		}
+
 		return (
 		<div>
-			{ slide }
 			{
-				model.systemMessage
-					? <h2>{model.systemMessage}</h2>
-					: model.identify
-						? <Identify>{model.name}</Identify>
-						: null
+				message
+					? <SystemMessage>{message}</SystemMessage>
+					: slide
 			}
 		</div>
 		);

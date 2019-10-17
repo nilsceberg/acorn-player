@@ -127,6 +127,10 @@ export class Connection {
 			this.model.slide = message.display;
 		}
 
+		if (message.rename !== undefined) {
+			this.model.name = message.rename;
+		}
+
 		return this.connectedState;
 	}
 
