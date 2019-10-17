@@ -118,6 +118,7 @@ export class Connection {
 
 	private async connectedState(message: any): Promise<State> {
 		this.log("Message: ", message);
+		this.model.systemMessage = "";
 
 		if (message.identify !== undefined) {
 			this.model.identify = message.identify;
@@ -129,6 +130,10 @@ export class Connection {
 
 		if (message.rename !== undefined) {
 			this.model.name = message.rename;
+		}
+
+		if (message.system !== undefined) {
+			this.model.systemMessage = message.system;
 		}
 
 		return this.connectedState;
