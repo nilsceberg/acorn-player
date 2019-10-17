@@ -1,5 +1,6 @@
 import { Model } from "../model/Model";
 
+import * as os from "os";
 import WebSocket from "ws";
 import { sleep } from "../util/async";
 
@@ -64,6 +65,7 @@ export class Connection {
 			this.state = this.initState;
 			this.send({
 				uuid: this.uuid,
+				hostname: os.hostname(),
 			});
 			this.log("sent");
 			
@@ -100,11 +102,20 @@ export class Connection {
 	}
 
 	private async initState(message: any): Promise<State> {
-		if (!message.name) {
-			return this.close("invalid welcome: " + JSON.stringify(message));
+		if (message.name !== undefined) {
+			this.onWelcome(message.name);
+			return this.connectedState;
 		}
 
-		const name = message.name;
+		if (message.pending !== undefined) {
+			this.model.systemMessage = "Awaiting registration";
+			return this.pendingState;
+		}
+
+		this.close("Invalid welcome");
+	}
+
+	private onWelcome(name: string) {
 		this.log("We are " + name);
 
 		// Reset state
@@ -112,8 +123,17 @@ export class Connection {
 		this.model.name = name;
 		this.model.identify = false;
 		this.model.slide = null;
+	}
 
-		return this.connectedState;
+	private async pendingState(message: any): Promise<State> {
+		this.log("Message: ", message);
+
+		if (message.name !== undefined) {
+			this.onWelcome(message.name);
+			return this.connectedState;
+		}
+
+		this.close("Invalid welcome");
 	}
 
 	private async connectedState(message: any): Promise<State> {
