@@ -16,8 +16,11 @@ export class Connection {
 	private connectionUuid: string;
 	private url: string;
 	private uuid: string;
-
+	private heartbeat: boolean = true;
 	private model: Model;
+
+	private heartbeatClear: NodeJS.Timeout;
+	private heartbeatExpect: NodeJS.Timeout;
 
 	constructor(url: string, uuid: string, model: Model) {
 		this.url = url;
@@ -68,7 +71,20 @@ export class Connection {
 				hostname: os.hostname(),
 			});
 			this.log("sent");
-			
+		});
+
+		this.ws.on("ping", () => {
+			console.log("ping");
+			this.heartbeat = true;
+			this.heartbeatClear = setTimeout(() => {
+				this.heartbeat = false;
+			}, 3000);
+
+			this.heartbeatExpect = setTimeout(() => {
+				if (!this.heartbeat) {
+					this.state = this.close("heartbeat lost", true);
+				}
+			}, 7000);
 		});
 	}
 
@@ -90,9 +106,16 @@ export class Connection {
 		this.ws.send(JSON.stringify(message));
 	}
 
-	private close(reason?: string): State {
+	private close(reason?: string, force: boolean = false): State {
 		this.log("Closing connection: " + reason);
-		this.ws.close();
+		clearInterval(this.heartbeatClear);
+		clearInterval(this.heartbeatExpect);
+		if (force) {
+			this.ws.terminate();
+		}
+		else {
+			this.ws.close();
+		}
 		return this.disconnectedState;
 	}
 
